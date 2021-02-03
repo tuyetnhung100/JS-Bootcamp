@@ -15,21 +15,36 @@ const todos = [{
     completed: true    
 }]
 
-const incompleteTodos = todos.filter(function (todo) {
-    return !todo.completed
-})
+// filters (searchText) will change with a new filter input
+const filters = {
+    searchText: ''
+}
 
-// You have 2 todos left (p element)
-const summary = document.createElement('h2')
-summary.textContent = `You have ${incompleteTodos.length} todos left`
-document.querySelector('body').appendChild(summary)
+const renderTodos = function (todos, filters) {
+    const filteredTodos = todos.filter(function (todo) {
+        return todo.text.toLowerCase().includes(filters.searchText.toLowerCase())
+    })
 
-// Add a p for each todo above (use text value)
-todos.forEach(function (todo) {
-    const p = document.createElement('p')
-    p.textContent = todo.text
-    document.querySelector('body').appendChild(p)
-})
+    document.querySelector('#todos').innerHTML = ''     // clears the todos div that holds all the previously 
+                                                        // rendered todos bc they don't match the filtered todos
+    const incompleteTodos = filteredTodos.filter(function (todo) {
+        return !todo.completed
+    })
+    
+    // You have 2 todos left (p element)
+    const summary = document.createElement('h2')
+    summary.textContent = `You have ${incompleteTodos.length} todos left`
+    document.querySelector('#todos').appendChild(summary)
+
+    // Add a p for each filtered todo above (add the filtered todos in)
+    filteredTodos.forEach(function(todo) {
+        const todoEl = document.createElement('p')
+        todoEl.textContent = todo.text
+        document.querySelector('#todos').appendChild(todoEl) 
+    })
+}
+
+renderTodos(todos, filters)
 
 // Listen for new todo creation
 document.querySelector('#add-todo').addEventListener('click', function(e) {
@@ -39,4 +54,10 @@ document.querySelector('#add-todo').addEventListener('click', function(e) {
 // Listen for todo text (input) change
 document.querySelector('#input-todo').addEventListener('input', function (e) {
     console.log(e.target.value)
+})
+
+// Listen for input-search change
+document.querySelector('#input-search').addEventListener('input', function (e) {
+    filters.searchText = e.target.value
+    renderTodos(todos, filters)     // rerender the latest filtered data
 })
