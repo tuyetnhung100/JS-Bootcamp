@@ -6,10 +6,12 @@
     </head>
     <body>
         <h1>Todos</h1>
-        <input type="text" id="input-todo" placeholder="Enter something to do">
-        <button id="add-todo">Add Todo</button>
-        <input type="text" id="input-search" placeholder="Filter todos"> 
+        <input type="text" id="search-text" placeholder="Filter todos"> 
         <div id="todos"></div>
+        <form id="todo-form">
+            <input type="text" placeholder="Something to do" name="todoText">
+            <button>Add Todo</button>
+        </form>
         <script src="todo-app.js"></script>
     </body>
 </html>

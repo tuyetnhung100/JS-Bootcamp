@@ -46,18 +46,18 @@ const renderTodos = function (todos, filters) {
 
 renderTodos(todos, filters)
 
-// Listen for new todo creation
-document.querySelector('#add-todo').addEventListener('click', function(e) {
-    console.log('Add a new todo...')
-})
-
-// Listen for todo text (input) change
-document.querySelector('#input-todo').addEventListener('input', function (e) {
-    console.log(e.target.value)
-})
-
-// Listen for input-search change
-document.querySelector('#input-search').addEventListener('input', function (e) {
+// Listen for input search-text change
+document.querySelector('#search-text').addEventListener('input', function (e) {
     filters.searchText = e.target.value
     renderTodos(todos, filters)     // rerender the latest filtered data
+})
+
+document.querySelector('#todo-form').addEventListener('submit', function (e) {
+    e.preventDefault()                      // cancel the default action
+    todos.push({                            // push the data onto the todos array
+        text: e.target.elements.todoText.value,
+        completed: false
+    })                     
+    renderTodos(todos, filters)             // rerender the app, make sure the latest data shows up
+    e.target.elements.todoText.value = ''   // clear the input field value
 })
