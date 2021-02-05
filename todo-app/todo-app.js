@@ -17,16 +17,30 @@ const todos = [{
 
 // filters (searchText) will change with a new filter input
 const filters = {
-    searchText: ''
+    searchText: '',
+    hideCompleted: false
 }
 
 const renderTodos = function (todos, filters) {
     const filteredTodos = todos.filter(function (todo) {
-        return todo.text.toLowerCase().includes(filters.searchText.toLowerCase())
+        const searchTextMatch = todo.text.toLowerCase().includes(filters.searchText.toLowerCase()) // solution 3 
+        const hideCompletedMatch = !filters.hideCompleted || !todo.completed
+        return searchTextMatch && hideCompletedMatch
     })
+
+    // for this to work, change 'const' filteredTodos above to 'let' 
+    // filteredTodos = filteredTodos.filter(function (todo) {
+    //     return !filters.hideCompleted || !todo.completed // solution 2 (1 line)
+    //     // if (filters.hideCompleted) {   // solution 1 
+    //     //     return !todo.completed
+    //     // } else {
+    //     //     return true
+    //     // }
+    // })
 
     document.querySelector('#todos').innerHTML = ''     // clears the todos div that holds all the previously 
                                                         // rendered todos bc they don't match the filtered todos
+                                                        
     const incompleteTodos = filteredTodos.filter(function (todo) {
         return !todo.completed
     })
@@ -60,4 +74,9 @@ document.querySelector('#todo-form').addEventListener('submit', function (e) {
     })                     
     renderTodos(todos, filters)             // rerender the app, make sure the latest data shows up
     e.target.elements.todoText.value = ''   // clear the input field value
+})
+
+document.querySelector('#hide-completed').addEventListener('change', function(e) {
+    filters.hideCompleted = e.target.checked   
+    renderTodos(todos, filters)
 })
